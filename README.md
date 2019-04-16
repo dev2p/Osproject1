@@ -3,6 +3,7 @@
 const n_p;
 const n_re;
     int need(int n_p,int n_re,int needres[n_p][n_re],int maxres[n_p][n_re],int res[n_p][n_re]);
+    void display(int n_p,int n_re,int needres[n_p][n_re],int maxres[n_p][n_re],int res[n_p][n_re]);
     bool check(int n_p,int n_re,int needres[n_p][n_re],int maxres[n_p][n_re],int res[n_p][n_re],int available[n_re]);
 int main()
 {
@@ -24,13 +25,14 @@ int main()
     }
     printf("enter the maximum no. of resource can allocate");
     printf("\n");
+    int res_for_need;
     for(i=0;i<n_p;i++)
     {
         printf("value for P%d procces = ",i);
         for(j=0;j<n_re;j++)
         {
-            scanf("%d",&m);
-            maxres[i][j]=m;
+            scanf("%d",&res_for_need);
+            maxres[i][j]=res_for_need;
         }
         printf("\n");
     }
@@ -41,7 +43,14 @@ int main()
  	scanf("%d",&available[i]);
  }
     need(n_p,n_re,needres,maxres,res);
- printf("===========================================================================================\n");
+    display(n_p,n_re,needres,maxres,res);
+    check(n_p,n_re,needres,maxres,res,available);
+    request(n_p,n_re,needres,maxres,res,available);
+}
+void display(int n_p,int n_re,int needres[n_p][n_re],int maxres[n_p][n_re],int res[n_p][n_re])
+{
+	int i,j;
+	 printf("===========================================================================================\n");
      printf("                         aloocate\t maximum\t need");
      printf("\n");
         for(i=0;i<n_p;i++)
@@ -63,7 +72,7 @@ int main()
         } 
         printf("\n");
     }
-   check(n_p,n_re,needres,maxres,res,available);
+    printf("==============================================================================================\n");
 }
 int need(int n_p,int n_re,int needres[n_p][n_re],int maxres[n_p][n_re],int res[n_p][n_re])
 {
@@ -141,3 +150,32 @@ printf("\n");
     }
         return true;
 } 
+int request(int n_p,int n_re,int needres[n_p][n_re],int maxres[n_p][n_re],int res[n_p][n_re],int available[n_re])
+{
+	char ch;
+	int p_id;
+	printf("Want to make request?[y/n]\n");
+	scanf("%s",&ch);
+	
+	int i;
+	while(ch!='n')
+	{
+	printf("Enter process number = ");
+	scanf("%d",&p_id);
+	printf("enter number of instance request for P%d",p_id);
+	for(i=0;i<n_re;i++)
+	{
+		int r;
+		scanf("%d",&r);
+		res[p_id][i]=res[p_id][i]+r;
+		available[i]=available[i]-r;
+		needres[p_id][i]=needres[p_id][i]-r;
+		
+	}
+	printf("you want more request = [y/n]");
+	scanf("%s",&ch);
+ }
+	printf("process after request \n");
+	display(n_p,n_re,needres,maxres,res);
+    check(n_p,n_re,needres,maxres,res,available);
+}
